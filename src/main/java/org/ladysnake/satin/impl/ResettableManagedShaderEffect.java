@@ -21,8 +21,9 @@ import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
-import net.minecraft.client.gl.JsonEffectShaderProgram;
 import net.minecraft.client.gl.PostEffectProcessor;
+import net.minecraft.client.gl.ShaderProgram;
+import net.minecraft.client.render.DefaultFramebufferSet;
 import net.minecraft.client.texture.AbstractTexture;
 import net.minecraft.resource.ResourceFactory;
 import net.minecraft.util.Identifier;
@@ -90,7 +91,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
 
     @Override
     protected PostEffectProcessor parseShader(ResourceFactory resourceFactory, MinecraftClient mc, Identifier location) throws IOException {
-        return new PostEffectProcessor(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), location);
+        return mc.getShaderLoader().loadPostEffect(location, DefaultFramebufferSet.MAIN_ONLY);
     }
 
     @Override
@@ -246,7 +247,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
     public void setupDynamicUniforms(int index, Runnable dynamicSetBlock) {
         AccessiblePassesShaderEffect sg = (AccessiblePassesShaderEffect) this.getShaderEffect();
         if (sg != null) {
-            JsonEffectShaderProgram sm = sg.getPasses().get(index).getProgram();
+            ShaderProgram sm = sg.getPasses().get(index).getProgram();
             ShaderPrograms.useShader(sm.getGlRef());
             dynamicSetBlock.run();
             ShaderPrograms.useShader(0);
