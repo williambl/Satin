@@ -1,4 +1,17 @@
 ------------------------------------------------------
+Version 3.0.0
+------------------------------------------------------
+Updated to MC 1.21.2
+
+**Changes**
+- Post process shaders are now loaded from `post_effect` and `shaders`
+  instead of respectively `shaders/post` and `shaders/program`.
+  By convention, files previously in `shaders/program` should go to the `shaders/post` subdirectory.
+- Includes (loaded from `shaders/include`) are now available in post process shaders
+- Post-process effect format has changed:
+  - `inputs` take a `sampler_name`, which will be suffixed with "Sampler" (e.g. `"sampler_name": "In"` becomes `"name": "InSampler"` in the shader definition)
+
+------------------------------------------------------
 Version 2.0.0
 ------------------------------------------------------
 Updated to MC 1.21

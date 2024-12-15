@@ -44,7 +44,7 @@ import java.util.function.Function;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
-public abstract class ResettableManagedShaderBase<S extends AutoCloseable> implements UniformFinder {
+public abstract class ResettableManagedShaderBase<S> implements UniformFinder {
     /**Location of the shader json definition file*/
     private final Identifier location;
     private final Map<String, ManagedUniform> managedUniforms = new HashMap<>();
@@ -82,7 +82,7 @@ public abstract class ResettableManagedShaderBase<S extends AutoCloseable> imple
         if (this.isInitialized()) {
             try {
                 assert this.shader != null;
-                this.shader.close();
+                this.doRelease(shader);
                 this.shader = null;
             } catch (Exception e) {
                 throw new RuntimeException("Failed to release shader " + this.location, e);
@@ -90,6 +90,8 @@ public abstract class ResettableManagedShaderBase<S extends AutoCloseable> imple
         }
         this.errored = false;
     }
+
+    protected abstract void doRelease(S shader);
 
     protected Collection<ManagedUniformBase> getManagedUniforms() {
         return this.allUniforms;

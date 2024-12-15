@@ -69,6 +69,11 @@ public final class ResettableManagedCoreShader extends ResettableManagedShaderBa
     }
 
     @Override
+    protected void doRelease(ShaderProgram shader) {
+        shader.close();
+    }
+
+    @Override
     public ShaderProgram getProgram() {
         return this.shader;
     }
