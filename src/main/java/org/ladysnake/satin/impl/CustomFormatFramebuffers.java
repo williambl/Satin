@@ -37,10 +37,10 @@ public class CustomFormatFramebuffers {
      * <p>Refer to {@link SimpleFramebuffer} for the list of parameters
      */
     @API(status = API.Status.EXPERIMENTAL)
-    public static Framebuffer create(int width, int height, boolean useDepth, boolean getError, TextureFormat format) {
+    public static Framebuffer create(int width, int height, boolean useDepth, TextureFormat format) {
         try {
             FORMAT.set(format);
-            return new SimpleFramebuffer(width, height, useDepth, getError);
+            return new SimpleFramebuffer(width, height, useDepth);
         } finally {
             FORMAT.remove();
         }

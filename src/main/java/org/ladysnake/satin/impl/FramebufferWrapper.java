@@ -24,6 +24,7 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.Window;
 import org.ladysnake.satin.Satin;
 import org.ladysnake.satin.api.managed.ManagedFramebuffer;
+import org.ladysnake.satin.mixin.client.AccessiblePassesShaderEffect;
 
 import javax.annotation.Nullable;
 
@@ -46,9 +47,10 @@ public final class FramebufferWrapper implements ManagedFramebuffer {
         if (shaderEffect == null) {
             this.wrapped = null;
         } else {
-            this.wrapped = shaderEffect.getSecondaryTarget(this.name);
+            // FIXME create the target instead and add it to a FramebufferSet
+            this.wrapped = null; ((AccessiblePassesShaderEffect) shaderEffect).getInternalTargets().get(this.name);
             if (this.wrapped == null) {
-                Satin.LOGGER.warn("No target framebuffer found with name {} in shader {}", this.name, shaderEffect.getName());
+                Satin.LOGGER.warn("No target framebuffer found with name {} in shader", this.name);
             }
         }
     }
@@ -86,19 +88,14 @@ public final class FramebufferWrapper implements ManagedFramebuffer {
     @Override
     public void draw(int width, int height, boolean disableBlend) {
         if (this.wrapped != null) {
-            this.wrapped.draw(width, height, disableBlend);
+            this.wrapped.draw(width, height);
         }
     }
 
     @Override
     public void clear() {
-        clear(MinecraftClient.IS_SYSTEM_MAC);
-    }
-
-    @Override
-    public void clear(boolean swallowErrors) {
         if (this.wrapped != null) {
-            this.wrapped.clear(swallowErrors);
+            this.wrapped.clear();
         }
     }
 

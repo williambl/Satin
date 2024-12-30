@@ -18,12 +18,20 @@
 package org.ladysnake.satin.impl;
 
 import net.minecraft.client.gl.Framebuffer;
+import net.minecraft.client.gl.PostEffectPass;
 import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.texture.AbstractTexture;
+
+import java.util.List;
 
 public final class ManagedSamplerUniformV1 extends ManagedSamplerUniformBase {
     public ManagedSamplerUniformV1(String name) {
         super(name);
+    }
+
+    @Override
+    public boolean findUniformTargets(List<PostEffectPass> shaders) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -44,11 +52,11 @@ public final class ManagedSamplerUniformV1 extends ManagedSamplerUniformBase {
     @Override
     protected void set(Object value) {
         SamplerAccess[] targets = this.targets;
-        if (targets.length > 0 && this.cachedValue != value) {
+        if (targets.length > 0 && this.value != value) {
             for (SamplerAccess target : targets) {
-                ((ShaderProgram) target).addSampler(this.name, value);
+                ((ShaderProgram) target).addSamplerTexture(this.name, value);
             }
-            this.cachedValue = value;
+            this.value = value;
         }
     }
 }

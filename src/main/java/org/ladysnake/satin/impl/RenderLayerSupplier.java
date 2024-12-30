@@ -18,6 +18,7 @@
 package org.ladysnake.satin.impl;
 
 import net.minecraft.client.gl.ShaderProgram;
+import net.minecraft.client.gl.ShaderProgramKey;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderPhase;
 import net.minecraft.client.render.VertexFormat;
@@ -44,9 +45,9 @@ public class RenderLayerSupplier {
         return new RenderLayerSupplier(name, builder -> builder.target(target));
     }
 
-    public static RenderLayerSupplier shader(String name, VertexFormat vertexFormat, Supplier<ShaderProgram> shaderSupplier) {
-        RenderPhase shader = Helper.makeShader(shaderSupplier);
-        return new RenderLayerSupplier(name, vertexFormat, builder -> Helper.applyShader(builder, shader));
+    public static RenderLayerSupplier shader(String name, VertexFormat vertexFormat, ShaderProgramKey shaderKey) {
+        RenderPhase shader = new RenderPhase.ShaderProgram(shaderKey);
+        return new RenderLayerSupplier(name, vertexFormat, builder -> builder.program((RenderPhase.ShaderProgram) shader));
     }
 
     public RenderLayerSupplier(String name,  Consumer<RenderLayer.MultiPhaseParameters.Builder> transformer) {
@@ -74,13 +75,6 @@ public class RenderLayerSupplier {
      * Big brain move right there
      */
     private static class Helper extends RenderPhase {
-        public static RenderPhase makeShader(Supplier<net.minecraft.client.gl.ShaderProgram> shader) {
-            return new ShaderProgram(shader);
-        }
-
-        public static void applyShader(RenderLayer.MultiPhaseParameters.Builder builder, RenderPhase shader) {
-            builder.program((ShaderProgram) shader);
-        }
 
         private Helper(String name, Runnable beginAction, Runnable endAction) {
             super(name, beginAction, endAction);

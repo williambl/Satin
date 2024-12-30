@@ -18,14 +18,20 @@
 package org.ladysnake.satin.mixin.client;
 
 import net.minecraft.client.gl.PostEffectPass;
+import net.minecraft.client.gl.PostEffectPipeline;
 import net.minecraft.client.gl.PostEffectProcessor;
+import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.List;
+import java.util.Map;
 
 @Mixin(PostEffectProcessor.class)
 public interface AccessiblePassesShaderEffect {
     @Accessor
     List<PostEffectPass> getPasses();
+
+    @Accessor
+    Map<Identifier, PostEffectPipeline.Targets> getInternalTargets();
 }

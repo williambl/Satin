@@ -117,20 +117,20 @@ public final class ReloadableShaderEffectManager implements ShaderEffectManager,
 
     @Override
     public void onResolutionChanged(int newWidth, int newHeight) {
-        runShaderSetup(newWidth, newHeight);
+        runShaderSetup();
     }
 
     @Override
     public void onRendererReload(WorldRenderer renderer) {
         Window window = MinecraftClient.getInstance().getWindow();
-        runShaderSetup(window.getFramebufferWidth(), window.getFramebufferHeight());
+        runShaderSetup();
     }
 
-    private void runShaderSetup(int newWidth, int newHeight) {
+    private void runShaderSetup() {
         if (!Satin.areShadersDisabled() && !managedShaders.isEmpty()) {
             for (ResettableManagedShaderBase<?> ss : managedShaders) {
                 if (ss.isInitialized()) {
-                    ss.setup(newWidth, newHeight);
+                    ss.setup();
                 }
             }
         }

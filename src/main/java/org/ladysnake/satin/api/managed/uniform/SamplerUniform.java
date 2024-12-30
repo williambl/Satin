@@ -27,14 +27,6 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
 public interface SamplerUniform {
 
     /**
-     * Sets the value of a sampler uniform declared in json using the Opengl texture slot id (between 0 and 30).
-     * @param activeTexture the active texture id to be used by the sampler
-     * @see org.lwjgl.opengl.GL13#GL_TEXTURE0
-     */
-    @API(status = MAINTAINED, since = "1.4.0")
-    void setDirect(int activeTexture);
-
-    /**
      * Sets the value of a sampler uniform declared in json
      *
      * @param texture a texture object

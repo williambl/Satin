@@ -71,9 +71,8 @@ public abstract class ResettableManagedShaderBase<S> implements UniformFinder {
 
     protected void initialize(ResourceFactory resourceManager) throws IOException {
         this.release();
-        MinecraftClient mc = MinecraftClient.getInstance();
-        this.shader = parseShader(resourceManager, mc, this.location);
-        this.setup(mc.getWindow().getFramebufferWidth(), mc.getWindow().getFramebufferHeight());
+        this.shader = parseShader(resourceManager, MinecraftClient.getInstance(), this.location);
+        this.setup();
     }
 
     protected abstract S parseShader(ResourceFactory resourceFactory, MinecraftClient mc, Identifier location) throws IOException;
@@ -174,7 +173,7 @@ public abstract class ResettableManagedShaderBase<S> implements UniformFinder {
     }
 
     @API(status = INTERNAL)
-    public abstract void setup(int newWidth, int newHeight);
+    public abstract void setup();
 
     @Override
     public String toString() {

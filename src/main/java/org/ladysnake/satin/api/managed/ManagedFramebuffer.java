@@ -61,8 +61,6 @@ public interface ManagedFramebuffer {
      */
     void clear();
 
-    void clear(boolean swallowErrors);
-
     /**
      * Gets a simple {@link RenderLayer} that is functionally identical to {@code baseLayer},
      * but with a different {@link RenderPhase.Target} that binds this framebuffer.

@@ -18,15 +18,48 @@
 package org.ladysnake.satin.impl;
 
 import net.minecraft.client.gl.Framebuffer;
-import net.minecraft.client.gl.JsonEffectShaderProgram;
+import net.minecraft.client.gl.PostEffectPass;
+import net.minecraft.client.gl.ShaderProgram;
+import net.minecraft.client.render.RenderPass;
 import net.minecraft.client.texture.AbstractTexture;
+import net.minecraft.client.util.Handle;
+import net.minecraft.util.Identifier;
 import org.ladysnake.satin.api.managed.uniform.SamplerUniformV2;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.function.IntSupplier;
 
-public final class ManagedSamplerUniformV2 extends ManagedSamplerUniformBase implements SamplerUniformV2 {
-    public ManagedSamplerUniformV2(String name) {
+/**
+ * A sampler uniform applying to a {@link PostEffectPass}
+ */
+public final class ManagedPassSamplerUniform extends ManagedSamplerUniformBase implements SamplerUniformV2, PostEffectPass.Sampler {
+    public ManagedPassSamplerUniform(String name) {
         super(name);
+    }
+
+    @Override
+    public void preRender(RenderPass pass, Map<Identifier, Handle<Framebuffer>> internalTargets) {
+        // NO-OP
+    }
+
+    @Override
+    public void bind(ShaderProgram program, Map<Identifier, Handle<Framebuffer>> internalTargets) {
+        program.addSamplerTexture(this.name, this.value.getAsInt());
+    }
+
+    @Override
+    public boolean findUniformTargets(List<PostEffectPass> passes) {
+        List<SamplerAccess> targets = new ArrayList<>(passes.size());
+        boolean found = false;
+        for (PostEffectPass pass : passes) {
+            pass.addSampler(this);
+            found = true;
+        }
+        this.targets = targets.toArray(new SamplerAccess[0]);
+        this.syncCurrentValues();
+        return found;
     }
 
     @Override
@@ -45,18 +78,10 @@ public final class ManagedSamplerUniformV2 extends ManagedSamplerUniformBase imp
     }
 
     @Override
-    protected void set(Object value) {
-        this.set((IntSupplier) value);
-    }
-
-    @Override
     public void set(IntSupplier value) {
         SamplerAccess[] targets = this.targets;
-        if (targets.length > 0 && this.cachedValue != value) {
-            for (SamplerAccess target : targets) {
-                ((JsonEffectShaderProgram) target).bindSampler(this.name, value);
-            }
-            this.cachedValue = value;
+        if (targets.length > 0 && this.value != value) {
+            this.value = value;
         }
     }
 }

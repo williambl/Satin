@@ -17,11 +17,14 @@
  */
 package org.ladysnake.satin.impl;
 
+import it.unimi.dsi.fastutil.ints.IntList;
+import net.minecraft.client.gl.ShaderProgramDefinition;
+
 import java.util.List;
 
 public interface SamplerAccess {
     void satin$removeSampler(String name);
     boolean satin$hasSampler(String name);
-    List<String> satin$getSamplerNames();
-    List<Integer> satin$getSamplerShaderLocs();
+    List<ShaderProgramDefinition.Sampler> satin$getSamplerNames();
+    IntList satin$getSamplerShaderLocs();
 }

@@ -1,4 +1,6 @@
-# Minecraft Shader Loading
+# Minecraft's new Shader system
+
+## Shader Loading
 
 `ShaderLoader` loads every file in the `shaders` directory
 ending in `.json`, `.fsh`, `.vsh`, or `.glsl`
@@ -84,4 +86,24 @@ classDiagram
     TextureSampler : +texture
     TextureSampler : +int width
     TextureSampler : +int height
+```
+
+## Post-process effect rendering
+
+Post effect rendering is now divided into two steps:
+1. building a reusable frame graph
+2. rendering the frame graph
+
+### Building the frame graph
+
+```mermaid
+---
+title: Frame Graph structure
+---
+classDiagram
+    Node <|-- ObjectNode
+    Node <|-- ResourceNode
+    ResourceNode "1" --* "*" FrameGraphBuilder
+    ObjectNode "1" --* "*" FrameGraphBuilder
+    FramePass "1" --* "*" FrameGraphBuilder
 ```

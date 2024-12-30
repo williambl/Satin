@@ -141,23 +141,6 @@ public interface ManagedShaderEffect extends UniformFinder {
     ManagedFramebuffer getTarget(String name);
 
     /**
-     * Forwards to {@link #setupDynamicUniforms(int, Runnable)} with an index of 0
-     *
-     * @param dynamicSetBlock a block in which dynamic uniforms are set
-     */
-    @API(status = EXPERIMENTAL, since = "1.0.0")
-    void setupDynamicUniforms(Runnable dynamicSetBlock);
-
-    /**
-     * Runs the given block while the shader at the given index is active
-     *
-     * @param index           the shader index within the group
-     * @param dynamicSetBlock a block in which dynamic name uniforms are set
-     */
-    @API(status = EXPERIMENTAL, since = "1.0.0")
-    void setupDynamicUniforms(int index, Runnable dynamicSetBlock);
-
-    /**
      * Sets the value of a uniform declared in json
      *
      * @param uniformName the name of the uniform field in the shader source file

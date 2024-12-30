@@ -18,9 +18,10 @@
 package org.ladysnake.satin.impl;
 
 import com.google.common.base.Preconditions;
-import net.fabricmc.fabric.impl.client.rendering.FabricShaderProgram;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.Defines;
 import net.minecraft.client.gl.ShaderProgram;
+import net.minecraft.client.gl.ShaderProgramKey;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.resource.ResourceFactory;
@@ -54,13 +55,12 @@ public final class ResettableManagedCoreShader extends ResettableManagedShaderBa
     }
 
     @Override
-    protected ShaderProgram parseShader(ResourceFactory resourceManager, MinecraftClient mc, Identifier location) throws IOException {
-        // Easiest way of getting modded shader locations to work
-        return new FabricShaderProgram(resourceManager, this.getLocation(), this.vertexFormat);
+    protected ShaderProgram parseShader(ResourceFactory resourceManager, MinecraftClient mc, Identifier location) {
+        return mc.getShaderLoader().getOrCreateProgram(new ShaderProgramKey(this.getLocation(), this.vertexFormat, Defines.builder().build()));
     }
 
     @Override
-    public void setup(int newWidth, int newHeight) {
+    public void setup() {
         Preconditions.checkNotNull(this.shader);
         for (ManagedUniformBase uniform : this.getManagedUniforms()) {
             setupUniform(uniform, this.shader);
