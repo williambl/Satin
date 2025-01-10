@@ -78,6 +78,7 @@ public class CustomFormatFramebuffers {
     public static final String FORMAT_KEY = "satin:format";
     private static final ThreadLocal<TextureFormat> FORMAT = new ThreadLocal<>();
     private static final ThreadLocal<Map<Identifier, TextureFormat>> TARGET_FORMATS_FOR_PROCESSOR_INIT = new ThreadLocal<>();
+    // identity hash-map because SimpleFramebufferFactories are records
     private static final Map<SimpleFramebufferFactory, TextureFormat> FORMATS_BY_FACTORY = new IdentityHashMap<>();
     private static final Map<Identifier, Map<Identifier, TextureFormat>> LOADING_TARGET_FORMATS_BY_POSTCHAIN_ID = new HashMap<>();
 
